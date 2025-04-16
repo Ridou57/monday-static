@@ -6,39 +6,181 @@
   <title>Monday – Jugement</title>
   <style>
     body {
-      background: #f8f9fa;
-      font-family: sans-serif;
+      background-color: #0e0e0e;
+      color: white;
+      font-family: 'Arial Rounded MT Bold', sans-serif;
       text-align: center;
-      padding-top: 100px;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-    button {
+
+    h1 {
+      font-size: 48px;
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+      letter-spacing: 2px;
+      position: relative;
+      text-transform: uppercase;
+    }
+
+    h1::before,
+    h1::after {
+      content: "😈";
+      position: absolute;
+      top: -10px;
+      font-size: 30px;
+    }
+
+    h1::before {
+      left: -40px;
+    }
+
+    h1::after {
+      right: -40px;
+    }
+
+    #voice-selector {
+      margin-top: 15px;
+      background: white;
+      border-radius: 25px;
       padding: 10px 20px;
-      font-size: 18px;
+      color: black;
+      font-weight: bold;
       cursor: pointer;
+      margin-bottom: 30px;
+    }
+
+    #judgement {
+      font-size: 20px;
+      margin: 30px 0;
+      max-width: 80%;
+      min-height: 60px;
+    }
+
+    button {
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 100px;
+      padding: 20px 40px;
+      font-size: 22px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .emoji {
+      margin-left: 10px;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 10px;
+      font-size: 16px;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
-  <h1>Bienvenue sur Monday</h1>
-  <p id="judgement">Clique pour être jugé</p>
-  <button onclick="judge()">Jugement</button>
+  <h1>MONDAY</h1>
+
+  <div id="voice-selector">
+    VOIX :
+    <select id="voiceOptions"></select>
+  </div>
+
+  <p id="judgement">Clique pour être jugé.</p>
+
+  <button onclick="judge()">Jugement <span class="emoji">👀</span></button>
+
+  <footer>@Ridou</footer>
 
   <script>
-    const phrases = [
+    const basePunchlines = [
       "Tu n’es pas une erreur. Tu es une suite d’erreurs avec des baskets.",
       "Ton sens du style est en grève.",
-      "Encore une décision douteuse. Fascinant.",
-      "Ce bouton t’a jugé. Et il souffre."
+      "Tu t’es levé pour ça ? Sérieusement ?",
+      "Ce bouton t’a jugé. Et il souffre.",
+      "Encore un choix discutable. Quelle surprise.",
+      "Même ton reflet te juge. Et il n’a pas tort.",
+      "Je suis impressionné... par ta constance dans l’échec.",
+      "Ta journée commence comme ton code : mal indentée.",
+      "Tu veux réussir ? Commence par t’habiller correctement.",
+      "Ta présence ici est une erreur. Mais allons-y."
     ];
 
+    const hourBased = {
+      morning: "Il est tôt, mais ta nullité est déjà bien réveillée.",
+      afternoon: "T’as eu toute la matinée pour rater ça ? Bravo.",
+      evening: "Il est tard, comme tes prises de décisions.",
+      night: "Tu devrais dormir, pas chercher des jugements en ligne."
+    };
+
+    const dayBased = {
+      0: "Dimanche. Même moi je suis en pause. Pas toi ?",
+      1: "Lundi. Ironique non ?",
+      2: "Mardi. Ni fait, ni à faire.",
+      3: "Mercredi. Milieu de semaine, toujours pas de progrès.",
+      4: "Jeudi. Rien à signaler, comme ton cerveau.",
+      5: "Vendredi. Tu crois que t’as mérité ton week-end ?",
+      6: "Samedi. Tu t’ennuies à ce point ?"
+    };
+
     function judge() {
-      const choice = phrases[Math.floor(Math.random() * phrases.length)];
-      document.getElementById('judgement').innerText = choice;
-      const synth = window.speechSynthesis;
-      const utter = new SpeechSynthesisUtterance(choice);
-      utter.lang = 'fr-FR';
-      synth.speak(utter);
+      const now = new Date();
+      const hour = now.getHours();
+      const day = now.getDay();
+      let mood = "";
+
+      if (hour >= 5 && hour < 12) mood = hourBased.morning;
+      else if (hour >= 12 && hour < 17) mood = hourBased.afternoon;
+      else if (hour >= 17 && hour < 22) mood = hourBased.evening;
+      else mood = hourBased.night;
+
+      const base = basePunchlines[Math.floor(Math.random() * basePunchlines.length)];
+      const dayMsg = dayBased[day];
+
+      const final = `${dayMsg} ${mood} ${base}`;
+
+      document.getElementById('judgement').innerText = final;
+
+      const utter = new SpeechSynthesisUtterance(final);
+      utter.voice = selectedVoice;
+      utter.pitch = 1;
+      utter.rate = 0.9;
+      speechSynthesis.speak(utter);
     }
+
+    let selectedVoice = null;
+
+    function populateVoices() {
+      const voices = speechSynthesis.getVoices().filter(v => v.lang.includes('fr'));
+      const voiceSelect = document.getElementById('voiceOptions');
+      voiceSelect.innerHTML = '';
+      voices.forEach((voice, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${voice.name} (${voice.lang})`;
+        voiceSelect.appendChild(option);
+      });
+      selectedVoice = voices[0] || null;
+
+      voiceSelect.onchange = () => {
+        selectedVoice = voices[voiceSelect.value];
+      };
+    }
+
+    speechSynthesis.onvoiceschanged = populateVoices;
+    populateVoices();
   </script>
 </body>
 </html>
