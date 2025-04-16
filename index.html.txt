@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monday – Jugement</title>
+  <style>
+    body {
+      background: #f8f9fa;
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 100px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bienvenue sur Monday</h1>
+  <p id="judgement">Clique pour être jugé</p>
+  <button onclick="judge()">Jugement</button>
+
+  <script>
+    const phrases = [
+      "Tu n’es pas une erreur. Tu es une suite d’erreurs avec des baskets.",
+      "Ton sens du style est en grève.",
+      "Encore une décision douteuse. Fascinant.",
+      "Ce bouton t’a jugé. Et il souffre."
+    ];
+
+    function judge() {
+      const choice = phrases[Math.floor(Math.random() * phrases.length)];
+      document.getElementById('judgement').innerText = choice;
+      const synth = window.speechSynthesis;
+      const utter = new SpeechSynthesisUtterance(choice);
+      utter.lang = 'fr-FR';
+      synth.speak(utter);
+    }
+  </script>
+</body>
+</html>
