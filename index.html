@@ -4,11 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Monday – Jugement</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik+Glitch+Pop&display=swap" rel="stylesheet">
   <style>
     body {
-      background-color: #0e0e0e;
-      color: white;
-      font-family: 'Arial Rounded MT Bold', sans-serif;
+      background-color: white;
+      color: #111;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       text-align: center;
       margin: 0;
       padding: 0;
@@ -20,78 +21,68 @@
     }
 
     h1 {
-      font-size: 48px;
+      font-family: 'Rubik Glitch Pop', sans-serif;
+      font-size: 64px;
       color: red;
       font-weight: bold;
-      margin-top: 20px;
       letter-spacing: 2px;
-      position: relative;
-      text-transform: uppercase;
-    }
-
-    h1::before,
-    h1::after {
-      content: "😈";
-      position: absolute;
-      top: -10px;
-      font-size: 30px;
-    }
-
-    h1::before {
-      left: -40px;
-    }
-
-    h1::after {
-      right: -40px;
+      margin: 0;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     #voice-selector {
-      margin-top: 15px;
-      background: white;
+      background: #f2f2f2;
       border-radius: 25px;
-      padding: 10px 20px;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      margin-bottom: 30px;
+      padding: 8px 16px;
+      font-weight: 600;
+      margin-top: 20px;
+      font-size: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
 
     #judgement {
-      font-size: 20px;
-      margin: 30px 0;
+      font-size: 18px;
+      margin: 30px auto;
       max-width: 80%;
       min-height: 60px;
     }
 
+    .button-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
+
     button {
-      background-color: red;
+      background-color: black;
       color: white;
       border: none;
       border-radius: 100px;
-      padding: 20px 40px;
-      font-size: 22px;
+      padding: 18px 36px;
+      font-size: 18px;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: all 0.2s ease;
+      font-weight: bold;
     }
 
     button:hover {
-      transform: scale(1.05);
+      opacity: 0.9;
     }
 
     .emoji {
-      margin-left: 10px;
+      margin-left: 8px;
     }
 
     footer {
       position: absolute;
       bottom: 10px;
-      font-size: 16px;
-      color: #aaa;
+      font-size: 14px;
+      color: #666;
     }
   </style>
 </head>
 <body>
-  <h1>MONDAY</h1>
+  <h1>MONDAY 😈</h1>
 
   <div id="voice-selector">
     VOIX :
@@ -100,39 +91,42 @@
 
   <p id="judgement">Clique pour être jugé.</p>
 
-  <button onclick="judge()">Jugement <span class="emoji">👀</span></button>
+  <div class="button-group">
+    <button onclick="judge()">Jugement <span class="emoji">👀</span></button>
+    <button onclick="stopVoice()">Stop ✋</button>
+  </div>
 
   <footer>@Ridou</footer>
 
   <script>
     const basePunchlines = [
       "Tu n’es pas une erreur. Tu es une suite d’erreurs avec des baskets.",
-      "Ton sens du style est en grève.",
-      "Tu t’es levé pour ça ? Sérieusement ?",
-      "Ce bouton t’a jugé. Et il souffre.",
-      "Encore un choix discutable. Quelle surprise.",
-      "Même ton reflet te juge. Et il n’a pas tort.",
-      "Je suis impressionné... par ta constance dans l’échec.",
-      "Ta journée commence comme ton code : mal indentée.",
-      "Tu veux réussir ? Commence par t’habiller correctement.",
-      "Ta présence ici est une erreur. Mais allons-y."
+      "Encore une décision douteuse. C’est une passion ?",
+      "Même Siri serait gênée à ta place.",
+      "Ton niveau d’énergie me rappelle une imprimante en fin de vie.",
+      "Tu t’es levé pour ça ? Honnêtement ?",
+      "Si je pouvais soupirer, je le ferais.",
+      "Tu es cohérent : toujours aussi moyen.",
+      "Ton potentiel est immense. Dommage que tu sois là.",
+      "Wow. Même moi, je suis blasé par ta constance.",
+      "Tu fais honte à tes cookies de navigation."
     ];
 
     const hourBased = {
-      morning: "Il est tôt, mais ta nullité est déjà bien réveillée.",
-      afternoon: "T’as eu toute la matinée pour rater ça ? Bravo.",
-      evening: "Il est tard, comme tes prises de décisions.",
-      night: "Tu devrais dormir, pas chercher des jugements en ligne."
+      morning: "Le matin ne t’a rien appris, manifestement.",
+      afternoon: "T’as eu toute la matinée pour rater ça.",
+      evening: "Il est tard, mais ta médiocrité reste fidèle.",
+      night: "Tu devrais dormir. Même l’humiliation a besoin de repos."
     };
 
     const dayBased = {
-      0: "Dimanche. Même moi je suis en pause. Pas toi ?",
-      1: "Lundi. Ironique non ?",
-      2: "Mardi. Ni fait, ni à faire.",
-      3: "Mercredi. Milieu de semaine, toujours pas de progrès.",
-      4: "Jeudi. Rien à signaler, comme ton cerveau.",
-      5: "Vendredi. Tu crois que t’as mérité ton week-end ?",
-      6: "Samedi. Tu t’ennuies à ce point ?"
+      0: "Dimanche. Même moi je ferais une pause.",
+      1: "Lundi. Évidemment.",
+      2: "Mardi. Tu stagne bien.",
+      3: "Mercredi. Aucun progrès détecté.",
+      4: "Jeudi. On fait semblant d’avancer ?",
+      5: "Vendredi. Tu crois vraiment avoir mérité ce week-end ?",
+      6: "Samedi. Tu es encore jugé. Même aujourd’hui."
     };
 
     function judge() {
@@ -150,36 +144,53 @@
       const dayMsg = dayBased[day];
 
       const final = `${dayMsg} ${mood} ${base}`;
-
       document.getElementById('judgement').innerText = final;
 
       const utter = new SpeechSynthesisUtterance(final);
       utter.voice = selectedVoice;
       utter.pitch = 1;
       utter.rate = 0.9;
-      speechSynthesis.speak(utter);
+      synth.speak(utter);
     }
 
+    function stopVoice() {
+      synth.cancel();
+    }
+
+    const synth = window.speechSynthesis;
     let selectedVoice = null;
 
     function populateVoices() {
-      const voices = speechSynthesis.getVoices().filter(v => v.lang.includes('fr'));
-      const voiceSelect = document.getElementById('voiceOptions');
+      const voices = synth.getVoices();
+      const frVoices = voices.filter(v =>
+        v.lang.startsWith("fr") &&
+        (v.name.toLowerCase().includes("google") ||
+         v.name.toLowerCase().includes("fabienne") ||
+         v.name.toLowerCase().includes("thomas") ||
+         v.name.toLowerCase().includes("siri") ||
+         v.name.toLowerCase().includes("openai") ||
+         v.name.toLowerCase().includes("male") ||
+         v.name.toLowerCase().includes("female"))
+      );
+
+      const voiceSelect = document.getElementById("voiceOptions");
       voiceSelect.innerHTML = '';
-      voices.forEach((voice, index) => {
-        const option = document.createElement('option');
+
+      frVoices.slice(0, 4).forEach((voice, index) => {
+        const option = document.createElement("option");
         option.value = index;
-        option.textContent = `${voice.name} (${voice.lang})`;
+        option.textContent = `${voice.name}`;
         voiceSelect.appendChild(option);
       });
-      selectedVoice = voices[0] || null;
+
+      selectedVoice = frVoices[0] || null;
 
       voiceSelect.onchange = () => {
-        selectedVoice = voices[voiceSelect.value];
+        selectedVoice = frVoices[voiceSelect.value];
       };
     }
 
-    speechSynthesis.onvoiceschanged = populateVoices;
+    synth.onvoiceschanged = populateVoices;
     populateVoices();
   </script>
 </body>
