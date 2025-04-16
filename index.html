@@ -21,13 +21,14 @@
     }
 
     h1 {
-      font-family: 'Rubik Glitch Pop', sans-serif;
+      font-family: 'Rubik Glitch Pop', cursive;
       font-size: 64px;
       color: red;
       font-weight: bold;
       letter-spacing: 2px;
       margin: 0;
       text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-transform: uppercase;
     }
 
     #voice-selector {
@@ -51,6 +52,7 @@
       display: flex;
       gap: 20px;
       justify-content: center;
+      flex-wrap: wrap;
     }
 
     button {
@@ -99,57 +101,72 @@
   <footer>@Ridou</footer>
 
   <script>
-    const basePunchlines = [
-      "Tu n’es pas une erreur. Tu es une suite d’erreurs avec des baskets.",
-      "Encore une décision douteuse. C’est une passion ?",
-      "Même Siri serait gênée à ta place.",
-      "Ton niveau d’énergie me rappelle une imprimante en fin de vie.",
-      "Tu t’es levé pour ça ? Honnêtement ?",
-      "Si je pouvais soupirer, je le ferais.",
-      "Tu es cohérent : toujours aussi moyen.",
-      "Ton potentiel est immense. Dommage que tu sois là.",
-      "Wow. Même moi, je suis blasé par ta constance.",
-      "Tu fais honte à tes cookies de navigation."
+    const punchlines = [
+      "T'es pas la chips la plus croustillante du paquet.",
+      "Ton cerveau, c’est du Wi-Fi public : lent et dangereux.",
+      "T'es comme une imprimante... tu fais du bruit pour rien.",
+      "Si l’intelligence était une appli, t’aurais pas assez de stockage.",
+      "On t’a pas choisi, t’étais juste là.",
+      "Tu veux briller ? Commence par t’allumer.",
+      "Même Google a du mal à te trouver.",
+      "T’es l’erreur 404 de la logique.",
+      "Ton niveau de motivation est en mode avion.",
+      "T’es pas bête, t’es... conceptuel.",
+      "T'as été conçu pendant une panne réseau.",
+      "On devrait t'archiver dans la catégorie “inclassable”.",
+      "Tu rates même les blagues automatiques.",
+      "Ton QI fait des pauses syndicales.",
+      "Ton chargeur d’idées est pas branché.",
+      "T’as été rebooté en mode sans échec.",
+      "Tes neurones font des RTT.",
+      "T’es pas nul, t’es une démonstration vivante de la marge d’erreur.",
+      "Tu joues à cache-cache avec la logique. Et tu gagnes souvent.",
+      "T’es le brouillon de quelqu’un d’autre.",
+      "T’as des idées, mais elles prennent pas leurs messages.",
+      "On dirait que t’es en bêta, mais jamais sorti.",
+      "Même ton ombre veut pas être associée à toi.",
+      "T’as les compétences d’une cuillère en bois.",
+      "Même Clippy de Microsoft aurait fermé la fenêtre.",
+      "T’es comme une mise à jour à 3h du mat : mal placée.",
+      "T’as deux vitesses : lent et figé.",
+      "Tes décisions sont sponsorisées par le doute.",
+      "Tu réfléchis plus lentement qu’un diaporama.",
+      "Tes pensées sont en 144p.",
+      "Tu devrais être un meme.",
+      "Même l’autocorrect abandonne avec toi.",
+      "T’as une connexion émotionnelle instable.",
+      "Ton GPS intérieur dit toujours “recalcul en cours”.",
+      "T’es en mode “écran de veille mental”.",
+      "T'es une note vocale de 7 minutes sans contenu.",
+      "Si l’échec était un style, tu serais influenceur.",
+      "Même ChatGPT hésite à te répondre.",
+      "T’as la clarté d’un pare-brise givré.",
+      "T'es une devinette sans réponse.",
+      "Ton sens de l’humour est sous vide.",
+      "Tu vis dans la case “autre”.",
+      "T’as mis “oui” à “accepter les cookies” et t’en es devenu un.",
+      "Même la machine à café t’ignore.",
+      "Tu marches sur la ligne floue de l'existence.",
+      "Ton karma est en maintenance.",
+      "T'es un mystère... même pour toi.",
+      "Si t’étais une app, tu serais désinstallée sans confirmation.",
+      "T’es un jour férié pour la productivité.",
+      "T'es pas bête, t'es hors-système."
     ];
 
-    const hourBased = {
-      morning: "Le matin ne t’a rien appris, manifestement.",
-      afternoon: "T’as eu toute la matinée pour rater ça.",
-      evening: "Il est tard, mais ta médiocrité reste fidèle.",
-      night: "Tu devrais dormir. Même l’humiliation a besoin de repos."
-    };
-
-    const dayBased = {
-      0: "Dimanche. Même moi je ferais une pause.",
-      1: "Lundi. Évidemment.",
-      2: "Mardi. Tu stagne bien.",
-      3: "Mercredi. Aucun progrès détecté.",
-      4: "Jeudi. On fait semblant d’avancer ?",
-      5: "Vendredi. Tu crois vraiment avoir mérité ce week-end ?",
-      6: "Samedi. Tu es encore jugé. Même aujourd’hui."
-    };
+    const synth = window.speechSynthesis;
+    let selectedVoice = null;
 
     function judge() {
-      const now = new Date();
-      const hour = now.getHours();
-      const day = now.getDay();
-      let mood = "";
+      synth.cancel(); // interrompt le jugement en cours
 
-      if (hour >= 5 && hour < 12) mood = hourBased.morning;
-      else if (hour >= 12 && hour < 17) mood = hourBased.afternoon;
-      else if (hour >= 17 && hour < 22) mood = hourBased.evening;
-      else mood = hourBased.night;
+      const line = punchlines[Math.floor(Math.random() * punchlines.length)];
+      document.getElementById("judgement").innerText = line;
 
-      const base = basePunchlines[Math.floor(Math.random() * basePunchlines.length)];
-      const dayMsg = dayBased[day];
-
-      const final = `${dayMsg} ${mood} ${base}`;
-      document.getElementById('judgement').innerText = final;
-
-      const utter = new SpeechSynthesisUtterance(final);
+      const utter = new SpeechSynthesisUtterance(line);
       utter.voice = selectedVoice;
       utter.pitch = 1;
-      utter.rate = 0.9;
+      utter.rate = 0.95;
       synth.speak(utter);
     }
 
@@ -157,36 +174,32 @@
       synth.cancel();
     }
 
-    const synth = window.speechSynthesis;
-    let selectedVoice = null;
-
     function populateVoices() {
-      const voices = synth.getVoices();
-      const frVoices = voices.filter(v =>
-        v.lang.startsWith("fr") &&
-        (v.name.toLowerCase().includes("google") ||
-         v.name.toLowerCase().includes("fabienne") ||
-         v.name.toLowerCase().includes("thomas") ||
-         v.name.toLowerCase().includes("siri") ||
-         v.name.toLowerCase().includes("openai") ||
-         v.name.toLowerCase().includes("male") ||
-         v.name.toLowerCase().includes("female"))
-      );
+      const voices = synth.getVoices().filter(v => 
+        v.lang.startsWith("fr") && 
+        (
+          v.name.toLowerCase().includes("google") ||
+          v.name.toLowerCase().includes("fabienne") ||
+          v.name.toLowerCase().includes("thomas") ||
+          v.name.toLowerCase().includes("france") ||
+          v.name.toLowerCase().includes("french") ||
+          v.name.toLowerCase().includes("female") ||
+          v.name.toLowerCase().includes("male")
+        )
+      ).slice(0, 4);
 
       const voiceSelect = document.getElementById("voiceOptions");
       voiceSelect.innerHTML = '';
-
-      frVoices.slice(0, 4).forEach((voice, index) => {
-        const option = document.createElement("option");
-        option.value = index;
-        option.textContent = `${voice.name}`;
-        voiceSelect.appendChild(option);
+      voices.forEach((voice, i) => {
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = voice.name;
+        voiceSelect.appendChild(opt);
       });
 
-      selectedVoice = frVoices[0] || null;
-
+      selectedVoice = voices[0] || null;
       voiceSelect.onchange = () => {
-        selectedVoice = frVoices[voiceSelect.value];
+        selectedVoice = voices[voiceSelect.value];
       };
     }
 
